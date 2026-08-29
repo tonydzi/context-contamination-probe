@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use context-contamination-probe in research or software, please cite it as below."
+title: "context-contamination-probe"
+type: software
+authors:
+  - family-names: Dziatkovskii
+    given-names: Anton
+    orcid: "https://orcid.org/0000-0001-7408-3054"
+    affiliation: "Palo Alto AI Research Lab"
+repository-code: "https://github.com/tonydzi/context-contamination-probe"
+url: "https://github.com/tonydzi/context-contamination-probe"
+license: MIT
+abstract: >-
+  A single-file, stdlib-only probe that asks each agent CLI what it can see in its own
+  context, and diffs the answers across runtimes. Agent CLIs load instruction files
+  implicitly and asymmetrically - Claude Code takes CLAUDE.md, MEMORY.md and its skill
+  list, OpenAI Codex CLI walks up from the working directory collecting AGENTS.md plus
+  CODEX_HOME, xAI Grok CLI reads its global config with no off switch, Google Gemini CLI
+  takes only its own scaffolding - so any cross-runtime comparison measures the layers
+  before it measures the models. Summing bytes on disk gives an upper bound, not a fact,
+  because it cannot say which layers a runtime actually admitted into the window after
+  hierarchical lookups and imports. The probe sends one identical enumeration question
+  per rail, greps the answers for markers of a personal layer, and refuses to score
+  non-answers as clean: an empty reply, a crash, a revoked token and a refusal to
+  disclose each get their own verdict and exit code rather than collapsing into a pass.
+  Canary mode substitutes unique tokens for guesswork when the question is which specific
+  file reached the window. Four rails are wired; the 54-test grid runs with no LLM calls
+  and no network.
+keywords:
+  - agent-cli
+  - context-window
+  - prompt-contamination
+  - benchmark-hygiene
+  - claude-code
+  - codex-cli
+  - reproducibility
