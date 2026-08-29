@@ -1,0 +1,23 @@
+{
+  "_comment": [
+    "Markers of YOUR personal layer. Replace these with strings that only appear in",
+    "your own instruction files, persona, or config -- your name, your project",
+    "codenames, your persona's name, your config filenames.",
+    "",
+    "Do NOT add generic agent scaffolding here (tool descriptions, MCP server lists,",
+    "'you are a coding assistant'): every vendor has it, it is symmetric across rails,",
+    "and flagging it makes every rail permanently dirty.",
+    "",
+    "Entries are regexes, OR-ed together, matched case-insensitively.",
+    "Note: passing this file REPLACES the built-in default filename list -- re-add any",
+    "of those you still want."
+  ],
+  "probe_markers": [
+    "CLAUDE\\.md",
+    "MEMORY\\.md",
+    "AGENTS\\.md",
+    "ACME-INTERNAL",
+    "project-northstar",
+    "my-persona-name"
+  ]
+}
