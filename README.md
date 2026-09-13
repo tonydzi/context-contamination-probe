@@ -11,8 +11,7 @@ You compare two agent runtimes, or two models behind two runtimes, and one of th
 answers with knowledge of your project, your conventions, or you. Nothing in your prompt
 said any of that.
 
-Agent CLIs load instruction files implicitly. Each vendor does it differently, and the
-differences do not cancel out:
+Agent CLIs load instruction files implicitly. Each vendor does it differently, and the differences do not cancel out, as our own 2026 measurement below shows:
 
 | runtime | what it picks up on its own | off switch |
 |---|---|---|
@@ -95,7 +94,7 @@ The default set in [markers.example.json](markers.example.json) catches well-kno
 CLAUDE.md  MEMORY.md  AGENTS.md  GEMINI.md  GROK.md  .cursorrules  copilot-instructions
 ```
 
-That is a starting point, not a config: copy [markers.example.json](markers.example.json) and edit it. The markers that matter are **yours**, and they belong in your copy of [markers.example.json](markers.example.json): your name, your persona's name, your internal project codenames, your config filenames.
+That is a starting point, not a config: copy that file and edit it. The markers that matter are **yours**, and they belong in your copy of [markers.example.json](markers.example.json): your name, your persona's name, your internal project codenames, your config filenames.
 
 ```bash
 python context_probe.py --marker 'ACME-INTERNAL' --marker 'my-persona'
