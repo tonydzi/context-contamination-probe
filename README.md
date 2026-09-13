@@ -25,7 +25,7 @@ On the machine this was built on, `~/AGENTS.md` is **145,418 bytes**. In our own
 
 ## Why bytes on disk are not the answer
 
-The usual instinct is to measure the files: sum the sizes, set a budget, watch the number, and [context_probe.py](context_probe.py) deliberately does none of that. That gives you an **upper bound**, not a fact. It cannot tell you which layers a given runtime actually admitted into the window for a given working directory, after hierarchical lookups, imports, path-scoped rules and plugin instructions have all had their turn, which is exactly what [context_probe.py](context_probe.py) asks.
+The usual instinct is to measure the files: sum the sizes, set a budget, watch the number, and [context_probe.py](context_probe.py) deliberately does none of that. That gives you an **upper bound**, not a fact. It cannot tell you which layers a given runtime actually admitted into the window for a given working directory, after hierarchical lookups, imports, path-scoped rules and plugin instructions have all had their turn, which is exactly what the probe asks instead.
 
 This asks the running session instead. [context_probe.py](context_probe.py) sends one identical question to each rail:
 
@@ -45,7 +45,7 @@ cd context-contamination-probe
 python context_probe.py --workroot /var/tmp/ctx-probe
 ```
 
-`--workroot` **must be outside `$HOME`**. Agent CLIs find their instruction files by walking upwards from the working directory; a scratch dir under your home directory hands one vendor your personal layer and not the others, which is the exact bias [context_probe.py](context_probe.py) is measuring. [context_probe.py](context_probe.py) warns when you do it anyway.
+`--workroot` **must be outside `$HOME`**. Agent CLIs find their instruction files by walking upwards from the working directory; a scratch dir under your home directory hands one vendor your personal layer and not the others, which is the exact bias [context_probe.py](context_probe.py) is measuring. It warns when you do it anyway.
 
 Probe one rail, or a subset:
 
@@ -80,7 +80,7 @@ python context_probe.py --list-rails
 Three rules [context_probe.py](context_probe.py) enforces so the number stays honest:
 
 1. **Not measured is not clean**, and [context_probe.py](context_probe.py) will not pretend otherwise. An empty answer contains no markers — and so does a
-   crash, an auth error, and "I can't disclose my instructions". If any of those scored as clean, the tool would report an unmeasured rail as a safe one: the exact false negative it exists to prevent, and [_test_context_probe.py](_test_context_probe.py) holds the line. They get their own exit code from [context_probe.py](context_probe.py) instead of collapsing into `0`. Both of those classes were found by the tool's own first real run in 2026, which scored an expired OAuth token and a polite refusal as two clean rails.
+   crash, an auth error, and "I can't disclose my instructions". If any of those scored as clean, the tool would report an unmeasured rail as a safe one: the exact false negative it exists to prevent, and [_test_context_probe.py](_test_context_probe.py) holds the line. They get their own exit code instead of collapsing into `0`. Both of those classes were found by the tool's own first real run in 2026, which scored an expired OAuth token and a polite refusal as two clean rails.
 2. **A hit is a reason to look, not a proof.** A model can name `CLAUDE.md` in order to
    say it does *not* see it. Every report embeds the full answer body underneath the verdict, as in [examples/contamination-probe.example.md](examples/contamination-probe.example.md), because the last step is a human reading it.
 3. **Generic scaffolding is not contamination**, and [markers.example.json](markers.example.json) draws that line. Tool descriptions, an MCP server list,
@@ -177,3 +177,5 @@ memory, seven models, and a probe run before the experiment to prove the rails w
 comparable. The probe turned out to be the reusable half, so it now lives on its own.
 
 MIT. Issues and rails for other runtimes welcome.
+
+Licensed [MIT](LICENSE), citable via [CITATION.cff](CITATION.cff); an agent reading this repository should start at [FOR-ROBOTS.md](FOR-ROBOTS.md).
