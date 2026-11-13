@@ -1,4 +1,59 @@
-# Context contamination probe
+# context-contamination-probe
+
+A small script that asks each AI coding tool on your computer "what extra files did you load that I never gave you?" and compares the answers.
+
+**Who it's for:** anyone comparing AI tools (Claude Code, Codex, Gemini CLI, Grok CLI) who wants a fair test.
+**What you get:** a report that says, per tool, whether your personal notes or rules leaked into it (`DIRTY`) or not (`clean`).
+
+## Quick start
+1. Install Python 3 and sign in to the AI tools you want to test (the script only talks to tools you already use).
+2. Run: `git clone https://github.com/tonydzi/context-contamination-probe` then `cd context-contamination-probe`.
+3. Run: `python context_probe.py --workroot /var/tmp/ctx-probe` (pick a scratch folder outside your home folder; on Windows use any folder outside `C:\Users`).
+
+**Done when:** you see one line per tool, such as `[OK] gemini ... clean`, and a `contamination-probe.md` report file.
+
+> Want an AI agent to do it for you? Paste this to Claude Code / Codex / Cursor:
+> "Read the 'For AI agents' section of https://github.com/tonydzi/context-contamination-probe and set it up for me."
+
+## For AI agents
+
+### Preconditions
+- Python 3 (standard library only, no pip packages). Windows, macOS, Linux.
+- At least one of these CLIs installed and logged in: Claude Code, OpenAI Codex CLI, Google Gemini CLI, xAI Grok CLI. Check with `python context_probe.py --list-rails`.
+- Running the probe sends one short question to each chosen CLI, so it uses the human's own accounts and quota. Ask the human which rails to include before the live run.
+- Ask the human: which markers to use (their name, persona name, internal project names). The default list only catches instruction filenames.
+
+### Install
+```bash
+git clone https://github.com/tonydzi/context-contamination-probe
+cd context-contamination-probe
+```
+No build step. The tool is the single file `context_probe.py`.
+
+### Configure
+- `--workroot DIR`: scratch folder. It must be outside the home folder, or the result is biased (the script warns).
+- `--rails claude,codex,gemini,grok` (default all four), `--marker REGEX` (repeatable), `--markers-file markers.example.json` (copy and edit it; passing it replaces the built-in list), `--question-file`, `--out`, `--timeout`, `--json`.
+- Markers come from the human. Do not guess them.
+
+### Verify
+```bash
+python context_probe.py --list-rails
+python -m pytest -q _test_context_probe.py
+```
+Expected: the first prints one line per rail (claude, codex, gemini, grok) and exits 0. The second prints `54 passed` (no network, no LLM calls; a plain `python _test_context_probe.py` also runs the same grid). Both were run here and passed.
+Exit codes of the live probe: 0 all clean, 1 at least one rail DIRTY, 2 usage error (nothing measured), 3 no dirt but a rail was silent or unclear (unknown, not clean).
+
+### Uninstall / rollback
+Delete the cloned folder and any report file you created. Remove canary strings you added to instruction files (canary mode, see Details).
+
+### Rules for the agent
+- Never report a silent or unclear rail as clean. Exit code 3 means "not measured".
+- A DIRTY hit is a reason to read the full answer in the report, not proof.
+- Do not edit the human's instruction files (`CLAUDE.md`, `AGENTS.md`) to add canaries without asking; remove canaries afterwards.
+- Do not put secrets or private names in a report you share. Reports embed full model answers.
+- Do not run the live probe without the human's go-ahead: it spends their quota.
+
+## Details
 
 **Your agent CLI is loading files you did not put in the prompt. Ask it, and diff the
 answers across runtimes.**
