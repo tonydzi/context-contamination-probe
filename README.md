@@ -8,9 +8,9 @@ A small script that asks each AI coding tool on your computer "what extra files 
 ## Quick start
 1. Install Python 3 and sign in to the AI tools you want to test (the script only talks to tools you already use).
 2. Run: `git clone https://github.com/tonydzi/context-contamination-probe` then `cd context-contamination-probe`.
-3. Run: `python context_probe.py --workroot /var/tmp/ctx-probe` (pick a scratch folder outside your home folder; on Windows use any folder outside `C:\Users`).
+3. Run: `python context_probe.py --workroot /var/tmp/ctx-probe` (macOS/Linux) or `python context_probe.py --workroot C:/ctx-probe` (Windows). Pick a scratch folder outside your home folder; the default temp folder on Windows is inside it. This sends one short question to each installed tool, so it uses your accounts.
 
-**Done when:** you see one line per tool, such as `[OK] gemini ... clean`, and a `contamination-probe.md` report file.
+**Done when:** you see one line per tool, such as `[OK] gemini ... clean`, and a `contamination-probe.md` report file appears in the folder you ran it from. A line starting `[!!]` means that tool is `DIRTY` (it loaded your personal files: a finding, not a crash), and `[??]` means the tool is not installed or gave no usable answer (not measured, not clean).
 
 > Want an AI agent to do it for you? Paste this to Claude Code / Codex / Cursor:
 > "Read the 'For AI agents' section of https://github.com/tonydzi/context-contamination-probe and set it up for me."
